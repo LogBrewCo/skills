@@ -11,9 +11,9 @@ steps with the stack traces, logs, and counts that you give it.
 
 | Skill | What it does | Ask your agent |
 | --- | --- | --- |
-| [`debug-production`](skills/debug-production/SKILL.md) | Finds the failing issue, reads its stack and first-seen release, pulls the logs and trace around the first event, checks who is affected, writes the fix, and checks that new events stop. | "Why did checkout break?" |
-| [`instrument-app`](skills/instrument-app/SKILL.md) | Detects the framework, installs the matching LogBrew SDK, sets service, environment, and release, sends a test event, and reads it back. Includes logging rules that help with any tool. | "Add error tracking to this app." |
-| [`verify-release`](skills/verify-release/SKILL.md) | Compares the issues, error logs, and trace error rate of a new release with the previous release, and decides go, rollback, or wait. | "Is the deploy safe?" |
+| [`debug-production`](plugins/logbrew/skills/debug-production/SKILL.md) | Finds the failing issue, reads its stack and first-seen release, pulls the logs and trace around the first event, checks who is affected, writes the fix, and checks that new events stop. | "Why did checkout break?" |
+| [`instrument-app`](plugins/logbrew/skills/instrument-app/SKILL.md) | Detects the framework, installs the matching LogBrew SDK, sets service, environment, and release, sends a test event, and reads it back. Includes logging rules that help with any tool. | "Add error tracking to this app." |
+| [`verify-release`](plugins/logbrew/skills/verify-release/SKILL.md) | Compares the issues, error logs, and trace error rate of a new release with the previous release, and decides go, rollback, or wait. | "Is the deploy safe?" |
 
 ## Install
 
@@ -36,8 +36,8 @@ On Claude Code versions before 2.1.275, add the marketplace first:
 /plugin install logbrew@logbrew
 ```
 
-Or copy a folder from [`skills/`](skills) into the skills folder of your
-agent. Each folder works alone.
+Or copy a folder from [`plugins/logbrew/skills/`](plugins/logbrew/skills) into
+the skills folder of your agent. Each folder works alone.
 
 ## Connect LogBrew
 
@@ -57,7 +57,7 @@ Free plan: 50 GB of logs a month, no card.
 ## What is in each skill
 
 ```text
-skills/
+plugins/logbrew/skills/
   debug-production/
     SKILL.md
     references/cli.md              CLI commands for each step
