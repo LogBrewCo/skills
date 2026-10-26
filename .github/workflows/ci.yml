@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    # Catch a new CLI release or catalog change that breaks a skill.
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      attestations: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+
+      - name: Install the newest LogBrew CLI release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          asset=logbrew-cli-x86_64-unknown-linux-gnu.tar.xz
+          dir="$RUNNER_TEMP/logbrew-cli"
+          mkdir -p "$dir"
+          cd "$dir"
+          gh release download --repo LogBrewCo/cli --pattern "$asset" --pattern "$asset.sha256"
+          sha256sum -c "$asset.sha256"
+          gh attestation verify "$asset" --repo LogBrewCo/cli
+          tar -xJf "$asset"
+          echo "$dir/logbrew-cli-x86_64-unknown-linux-gnu" >> "$GITHUB_PATH"
+
+      - name: Check skills, links, commands, operations, and evals
+        run: |
+          logbrew --version
+          python3 scripts/check.py
+
+      - name: Validate the plugin and marketplace
+        run: npx --yes @anthropic-ai/claude-code@2.1.310 plugin validate --strict .
+
+      - name: Install the skills with the skills CLI
+        run: |
+          set -euo pipefail
+          target="$RUNNER_TEMP/skills-install"
+          mkdir -p "$target"
+          cd "$target"
+          npx --yes skills@1.7.4 add "$GITHUB_WORKSPACE" --skill '*' -a codex -y --copy --json > result.json
+          jq -e 'length == 3 and all(.status == "installed")' result.json
+          for skill in "$GITHUB_WORKSPACE"/skills/*/; do
+            name="$(basename "$skill")"
+            diff -r "$skill" ".agents/skills/$name"
+          done

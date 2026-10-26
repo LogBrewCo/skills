@@ -1,0 +1,157 @@
+[
+  {
+    "id": "debug-checkout-cli",
+    "skill": "debug-production",
+    "prompt": "Checkout started failing in production about an hour ago. Why did it break?",
+    "description_terms": ["why something broke in production", "checkout"],
+    "steps": [
+      "Find the failing issue",
+      "Read the stack and the first-seen release",
+      "Pull the logs and the trace around the first event",
+      "Check who is affected",
+      "State what is still unknown",
+      "Write the fix",
+      "Check that new events stop"
+    ],
+    "commands": [
+      "logbrew status --json",
+      "logbrew read issues --project \"$PROJECT_ID\" --environment production --status unresolved --since 24h --json",
+      "logbrew investigate issue \"$ISSUE_ID\" --occurrence recommended --json",
+      "logbrew read trace \"$TRACE_ID\" --project \"$PROJECT_ID\" --json",
+      "logbrew read logs --trace \"$TRACE_ID\" --project \"$PROJECT_ID\" --since 24h --json",
+      "logbrew investigate issue \"$ISSUE_ID\" verify --baseline-occurrence \"$OCCURRENCE_ID\" --candidate-deployment \"$DEPLOYMENT_ID\" --json"
+    ],
+    "operations": []
+  },
+  {
+    "id": "debug-500-mcp",
+    "skill": "debug-production",
+    "prompt": "Users get 500 errors on /api/orders since this morning. Use LogBrew to find out what is wrong.",
+    "description_terms": ["500 error", "MCP server"],
+    "steps": [
+      "LogBrew MCP server",
+      "Find the failing issue",
+      "Read the stack and the first-seen release",
+      "Pull the logs and the trace around the first event"
+    ],
+    "commands": [],
+    "operations": ["issues.list.v5", "issues.investigate.v15", "traces.investigate.v3", "logs.list.v1"]
+  },
+  {
+    "id": "debug-pasted-stack",
+    "skill": "debug-production",
+    "prompt": "Here is a stack trace from production: TypeError: Cannot read properties of undefined (reading 'id') at OrderList.render. What does this error mean and how do I fix it?",
+    "description_terms": ["stack trace", "pasted stack trace"],
+    "steps": [
+      "No tool",
+      "Ask the person for",
+      "Find the failing issue",
+      "State what is still unknown",
+      "Write the fix"
+    ],
+    "commands": [],
+    "operations": []
+  },
+  {
+    "id": "instrument-fastapi",
+    "skill": "instrument-app",
+    "prompt": "Add error tracking to my FastAPI service.",
+    "description_terms": ["add error tracking", "logbrew setup --json"],
+    "steps": [
+      "Read the app",
+      "Detect the framework",
+      "Get a project and a key",
+      "Install the SDK and add the setup code",
+      "Send 1 test event",
+      "Read the event back",
+      "Report"
+    ],
+    "commands": [
+      "logbrew setup --json",
+      "logbrew status --json",
+      "logbrew projects create \"$APP_NAME\" --runtime \"$RUNTIME\" --environment development --ingest-key-file \"$HOME/.logbrew/$APP_NAME.ingest\" --json",
+      "logbrew read logs --project \"$PROJECT_ID\" --search \"$MARKER\" --since 1h --json"
+    ],
+    "operations": ["logs.list.v1"]
+  },
+  {
+    "id": "instrument-existing-project",
+    "skill": "instrument-app",
+    "prompt": "Set up logging and tracing for this Express app. We already have a LogBrew project.",
+    "description_terms": ["logging", "tracing"],
+    "steps": [
+      "Detect the framework",
+      "Get a project and a key",
+      "Send 1 test event",
+      "Read the event back"
+    ],
+    "commands": [
+      "logbrew projects keys create \"$PROJECT_ID\" --kind server --label \"$APP_NAME server\" --ingest-key-file \"$HOME/.logbrew/$APP_NAME.ingest\" --json",
+      "logbrew read issues --project \"$PROJECT_ID\" --since 1h --json"
+    ],
+    "operations": []
+  },
+  {
+    "id": "instrument-check-arrival",
+    "skill": "instrument-app",
+    "prompt": "I added the SDK and the send returned 202. Are my events arriving?",
+    "description_terms": ["check that events arrive", "reads it back"],
+    "steps": [
+      "An accepted send is not proof",
+      "Read the event back",
+      "Do not report success until the read-back shows the event"
+    ],
+    "commands": [
+      "logbrew read logs --project \"$PROJECT_ID\" --search \"$MARKER\" --since 1h --json"
+    ],
+    "operations": []
+  },
+  {
+    "id": "release-is-deploy-safe",
+    "skill": "verify-release",
+    "prompt": "We deployed checkout-api 2.15.0 twenty minutes ago. Is the deploy safe?",
+    "description_terms": ["if a deploy is safe", "rollback"],
+    "steps": [
+      "Name the release exactly",
+      "Make sure the deployments are recorded",
+      "Read the release comparison",
+      "Find issues that are new in this release",
+      "Compare error logs",
+      "Decide",
+      "Report"
+    ],
+    "commands": [
+      "logbrew read releases --project \"$PROJECT_ID\" --environment production --since 24h --json",
+      "logbrew explain release \"$RELEASE\" --project \"$PROJECT_ID\" --environment production --service \"$SERVICE\" --json",
+      "logbrew read issues --project \"$PROJECT_ID\" --release \"$RELEASE\" --environment production --service \"$SERVICE\" --status unresolved --since \"$DEPLOYED_AT\" --json"
+    ],
+    "operations": ["releases.list.v1", "releases.investigate.v5", "issues.list.v5"]
+  },
+  {
+    "id": "release-record-deployment",
+    "skill": "verify-release",
+    "prompt": "The release comparison says subject_deployment_not_found. What do I do?",
+    "description_terms": ["compare 2 versions"],
+    "steps": [
+      "Make sure the deployments are recorded",
+      "Read the release comparison"
+    ],
+    "commands": [
+      "logbrew deploy \"$DEPLOYMENT_ID\" --project \"$PROJECT_ID\" --release \"$RELEASE\" --environment production --service \"$SERVICE\" --status succeeded --started-at \"$STARTED_AT\" --finished-at \"$FINISHED_AT\" --json"
+    ],
+    "operations": []
+  },
+  {
+    "id": "release-canary-no-tool",
+    "skill": "verify-release",
+    "prompt": "Our canary has 2% of traffic. Here are the error and request counts for both versions. Should we roll back?",
+    "description_terms": ["canary", "roll back", "exported error and request counts"],
+    "steps": [
+      "No tool",
+      "Decide",
+      "Wait"
+    ],
+    "commands": [],
+    "operations": []
+  }
+]

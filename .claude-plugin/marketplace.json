@@ -1,0 +1,15 @@
+{
+  "name": "logbrew",
+  "description": "LogBrew agent skills and the hosted LogBrew MCP server.",
+  "owner": {
+    "name": "LogBrew",
+    "url": "https://logbrew.co"
+  },
+  "plugins": [
+    {
+      "name": "logbrew",
+      "source": "./",
+      "description": "Debug production errors, add error tracking and logs to an app, and check releases with LogBrew."
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "logbrew",
+  "displayName": "LogBrew",
+  "version": "0.1.0",
+  "description": "Debug production errors, add error tracking and logs to an app, and check releases with LogBrew. Includes the hosted LogBrew MCP server.",
+  "author": {
+    "name": "LogBrew",
+    "url": "https://logbrew.co"
+  },
+  "homepage": "https://logbrew.co",
+  "repository": "https://github.com/LogBrewCo/skills",
+  "license": "MIT",
+  "keywords": [
+    "debugging",
+    "error-tracking",
+    "logging",
+    "tracing",
+    "observability",
+    "releases",
+    "mcp"
+  ],
+  "documentationUrl": "https://docs.logbrew.co/guides/ai-agents",
+  "mcpServers": {
+    "logbrew": {
+      "type": "http",
+      "url": "https://mcp.logbrew.co/mcp"
+    }
+  },
+  "icon": "./.claude-plugin/icon.png",
+  "privacyPolicyUrl": "https://logbrew.co/privacy",
+  "termsOfServiceUrl": "https://logbrew.co/terms"
+}
