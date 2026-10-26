@@ -28,7 +28,8 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SKILLS = ROOT / "skills"
+PLUGIN = ROOT / "plugins" / "logbrew"
+SKILLS = PLUGIN / "skills"
 CATALOG_URL = "https://raw.githubusercontent.com/LogBrewCo/mcp/main/catalog/operations.json"
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 ALLOWED_KEYS = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
@@ -109,7 +110,7 @@ def check_skill(skill_dir: Path) -> dict[str, str]:
 
 
 def check_manifests() -> None:
-    plugin_path = ROOT / ".claude-plugin" / "plugin.json"
+    plugin_path = PLUGIN / ".claude-plugin" / "plugin.json"
     market_path = ROOT / ".claude-plugin" / "marketplace.json"
     try:
         plugin = json.loads(plugin_path.read_text(encoding="utf-8"))

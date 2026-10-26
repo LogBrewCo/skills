@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "logbrew",
-      "source": "./",
+      "source": "./plugins/logbrew",
       "description": "Debug production errors, add error tracking and logs to an app, and check releases with LogBrew."
     }
   ]

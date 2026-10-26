@@ -6,8 +6,10 @@ public history.
 
 ## Ownership and Source of Truth
 
-- This repository owns the agent skills in `skills/`, the plugin and
-  marketplace manifests in `.claude-plugin/`, and their checks.
+- This repository owns the `logbrew` plugin in `plugins/logbrew/` (its agent
+  skills in `skills/` and its manifest in `.claude-plugin/`), the marketplace
+  manifest in the root `.claude-plugin/`, and their checks. Keep scripts and
+  tests outside the plugin folder, since everything inside it ships.
 - The released `logbrew` CLI owns command names and flags. The hosted MCP
   server's operation catalog owns operation names and input fields. The SDK
   package READMEs own setup code. Copy from those sources; never invent a
