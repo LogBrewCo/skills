@@ -5,12 +5,9 @@ Every command here is in the help of the released `logbrew` CLI. Run
 
 ## Install and access
 
-Install the CLI with one of these commands:
-
-```bash
-brew install LogBrewCo/tap/logbrew
-npm install -g logbrew-cli@latest
-```
+If the `logbrew` CLI is not installed, ask the person to install it. The
+[CLI guide](https://docs.logbrew.co/guides/cli#install-the-cli) lists the
+install methods.
 
 Read access comes from one of 2 sources:
 

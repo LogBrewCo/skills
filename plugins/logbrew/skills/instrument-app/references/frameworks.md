@@ -6,38 +6,42 @@ Read it before you change defaults. All packages are in
 [LogBrewCo/sdk](https://github.com/LogBrewCo/sdk).
 
 Install only the packages that the app needs: the core package for the
-runtime, then the framework package.
+runtime, then the framework package. Use the package manager that the app
+already uses. `logbrew setup --json` prints the install command for the
+detected project in `install_plan.install_command`. The
+[SDK guide](https://docs.logbrew.co/guides/sdk-ingestion#package-manager-installs)
+shows the install command for each package manager.
 
-## Install commands
+## Packages
 
-| Runtime or framework | Install | Package README |
+| Runtime or framework | Packages | Package README |
 | --- | --- | --- |
-| Node.js | `npm install @logbrew/sdk @logbrew/node` | [`@logbrew/node`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-node) |
-| Express | `npm install @logbrew/sdk @logbrew/node @logbrew/express express` | [`@logbrew/express`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-express) |
-| Fastify | `npm install @logbrew/sdk @logbrew/node @logbrew/fastify fastify` | [`@logbrew/fastify`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-fastify) |
-| NestJS | `npm install @logbrew/sdk @logbrew/node @logbrew/nestjs @nestjs/common @nestjs/core @nestjs/platform-express reflect-metadata rxjs` | [`@logbrew/nestjs`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-nestjs) |
-| Next.js | `npm install @logbrew/sdk @logbrew/node @logbrew/next next react react-dom` | [`@logbrew/next`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-next) |
-| React | `npm install @logbrew/sdk @logbrew/react react` | [`@logbrew/react`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-react) |
-| Browser | `npm install @logbrew/sdk @logbrew/browser` | [`@logbrew/browser`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-browser) |
-| Vue | `npm install @logbrew/sdk @logbrew/vue` | [`@logbrew/vue`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-vue) |
-| Angular | `npm install @logbrew/sdk @logbrew/angular` | [`@logbrew/angular`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-angular) |
-| Svelte and SvelteKit | `npm install @logbrew/sdk @logbrew/browser @logbrew/svelte` | [`@logbrew/svelte`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-svelte) |
-| React Native | `npm install @logbrew/sdk @logbrew/react-native` | [`@logbrew/react-native`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-react-native) |
-| Python | `python3 -m pip install logbrew-sdk` | [`logbrew-sdk`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_py) |
-| FastAPI | `python3 -m pip install logbrew-fastapi` | [`logbrew-fastapi`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_fastapi) |
-| Django | `python3 -m pip install logbrew-sdk logbrew-django` | [`logbrew-django`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_django) |
-| Flask | `python3 -m pip install logbrew-sdk logbrew-flask` | [`logbrew-flask`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_flask) |
-| Go | `go get github.com/LogBrewCo/sdk/go/logbrew@latest` | [`go/logbrew`](https://github.com/LogBrewCo/sdk/tree/main/go/logbrew) |
-| Gin | `go get github.com/LogBrewCo/sdk/go/logbrew/gin@latest` | [`go/logbrew/gin`](https://github.com/LogBrewCo/sdk/tree/main/go/logbrew/gin) |
-| Ruby and Rails | `gem "logbrew-sdk"` in the Gemfile, then `bundle install` | [`logbrew-sdk`](https://github.com/LogBrewCo/sdk/tree/main/ruby/logbrew-ruby) |
-| PHP, Laravel, Symfony | `composer require logbrew/sdk` | [`logbrew/sdk`](https://github.com/LogBrewCo/sdk/tree/main/php/logbrew-php) |
-| Rust | `cargo add logbrew --features http` | [`logbrew`](https://github.com/LogBrewCo/sdk/tree/main/rust/logbrew) |
+| Node.js | `@logbrew/sdk`, `@logbrew/node` from npm | [`@logbrew/node`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-node) |
+| Express | `@logbrew/sdk`, `@logbrew/node`, `@logbrew/express` from npm, with `express` | [`@logbrew/express`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-express) |
+| Fastify | `@logbrew/sdk`, `@logbrew/node`, `@logbrew/fastify` from npm, with `fastify` | [`@logbrew/fastify`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-fastify) |
+| NestJS | `@logbrew/sdk`, `@logbrew/node`, `@logbrew/nestjs` from npm, with `@nestjs/common`, `@nestjs/core`, `@nestjs/platform-express`, `reflect-metadata`, `rxjs` | [`@logbrew/nestjs`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-nestjs) |
+| Next.js | `@logbrew/sdk`, `@logbrew/node`, `@logbrew/next` from npm, with `next`, `react`, `react-dom` | [`@logbrew/next`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-next) |
+| React | `@logbrew/sdk`, `@logbrew/react` from npm, with `react` | [`@logbrew/react`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-react) |
+| Browser | `@logbrew/sdk`, `@logbrew/browser` from npm | [`@logbrew/browser`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-browser) |
+| Vue | `@logbrew/sdk`, `@logbrew/vue` from npm | [`@logbrew/vue`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-vue) |
+| Angular | `@logbrew/sdk`, `@logbrew/angular` from npm | [`@logbrew/angular`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-angular) |
+| Svelte and SvelteKit | `@logbrew/sdk`, `@logbrew/browser`, `@logbrew/svelte` from npm | [`@logbrew/svelte`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-svelte) |
+| React Native | `@logbrew/sdk`, `@logbrew/react-native` from npm | [`@logbrew/react-native`](https://github.com/LogBrewCo/sdk/tree/main/js/logbrew-react-native) |
+| Python | `logbrew-sdk` from PyPI | [`logbrew-sdk`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_py) |
+| FastAPI | `logbrew-fastapi` from PyPI | [`logbrew-fastapi`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_fastapi) |
+| Django | `logbrew-sdk`, `logbrew-django` from PyPI | [`logbrew-django`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_django) |
+| Flask | `logbrew-sdk`, `logbrew-flask` from PyPI | [`logbrew-flask`](https://github.com/LogBrewCo/sdk/tree/main/python/logbrew_flask) |
+| Go | Go module `github.com/LogBrewCo/sdk/go/logbrew` | [`go/logbrew`](https://github.com/LogBrewCo/sdk/tree/main/go/logbrew) |
+| Gin | Go module `github.com/LogBrewCo/sdk/go/logbrew/gin` | [`go/logbrew/gin`](https://github.com/LogBrewCo/sdk/tree/main/go/logbrew/gin) |
+| Ruby and Rails | `logbrew-sdk` gem in the Gemfile | [`logbrew-sdk`](https://github.com/LogBrewCo/sdk/tree/main/ruby/logbrew-ruby) |
+| PHP, Laravel, Symfony | `logbrew/sdk` from Packagist | [`logbrew/sdk`](https://github.com/LogBrewCo/sdk/tree/main/php/logbrew-php) |
+| Rust | `logbrew` crate with the `http` feature | [`logbrew`](https://github.com/LogBrewCo/sdk/tree/main/rust/logbrew) |
 | Java and Spring | `co.logbrew:logbrew-sdk` from Maven Central | [`logbrew-java`](https://github.com/LogBrewCo/sdk/tree/main/java/logbrew-java) |
 | Kotlin and Android | `co.logbrew:logbrew-kotlin` from Maven Central | [`logbrew-kotlin`](https://github.com/LogBrewCo/sdk/tree/main/kotlin/logbrew-kotlin) |
-| .NET | `dotnet add package LogBrew` | [`LogBrew`](https://github.com/LogBrewCo/sdk/tree/main/dotnet/logbrew-dotnet) |
-| ASP.NET Core | `dotnet add package LogBrew.AspNetCore` | [`LogBrew.AspNetCore`](https://github.com/LogBrewCo/sdk/tree/main/dotnet/logbrew-dotnet/src/LogBrew.AspNetCore) |
+| .NET | `LogBrew` from NuGet | [`LogBrew`](https://github.com/LogBrewCo/sdk/tree/main/dotnet/logbrew-dotnet) |
+| ASP.NET Core | `LogBrew.AspNetCore` from NuGet | [`LogBrew.AspNetCore`](https://github.com/LogBrewCo/sdk/tree/main/dotnet/logbrew-dotnet/src/LogBrew.AspNetCore) |
 | Swift and Apple apps | Add `https://github.com/LogBrewCo/sdk.git` with SwiftPM and use the `LogBrew` product | [`logbrew-swift`](https://github.com/LogBrewCo/sdk/tree/main/swift/logbrew-swift) |
-| Unity | `co.logbrew.unity` | [`logbrew-unity`](https://github.com/LogBrewCo/sdk/tree/main/unity/logbrew-unity) |
+| Unity | `co.logbrew.unity` from OpenUPM | [`logbrew-unity`](https://github.com/LogBrewCo/sdk/tree/main/unity/logbrew-unity) |
 | C | Source and header client | [`logbrew-c`](https://github.com/LogBrewCo/sdk/tree/main/c/logbrew-c) |
 | C++ | CMake `FetchContent`; `logbrew setup --json` prints the block | [`logbrew-cpp`](https://github.com/LogBrewCo/sdk/tree/main/cpp/logbrew-cpp) |
 
