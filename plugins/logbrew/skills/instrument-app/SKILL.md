@@ -45,9 +45,10 @@ is not `null`, use `install_plan.install_command`, check each item in
 kind that each surface needs. When `install_plan` is `null`, select the
 package from [references/frameworks.md](references/frameworks.md).
 
-If the CLI is not installed, install it with
-`brew install LogBrewCo/tap/logbrew` or `npm install -g logbrew-cli@latest`,
-or select the package from the manifest by hand.
+If the `logbrew` CLI is not installed, ask the person to install it. The
+[CLI guide](https://docs.logbrew.co/guides/cli#install-the-cli) lists the
+install methods. Without the CLI, select the package from
+[references/frameworks.md](references/frameworks.md) by hand.
 
 ### 3. Get a project and a key
 
