@@ -250,8 +250,8 @@ def command_tokens(command: str) -> list[str] | None:
     return tokens
 
 
-def parse_usage(line: str) -> tuple[list[tuple[str, frozenset[str], bool]], dict[str, bool]]:
-    """Return the positional pattern and the flags (name -> takes a value)."""
+def parse_usage(line: str) -> tuple[list[tuple[str, frozenset[str], bool]], dict[str, int]]:
+    """Return the positional pattern and the flags (name -> number of values)."""
     words = line.split()[1:]
     pattern: list[tuple[str, frozenset[str], bool]] = []
     index = 0
@@ -264,22 +264,24 @@ def parse_usage(line: str) -> tuple[list[tuple[str, frozenset[str], bool]], dict
         else:
             pattern.append(("literal", frozenset(word.split("|")), variadic))
         index += 1
-    flags: dict[str, bool] = {}
+    flags: dict[str, int] = {}
     for position, word in enumerate(words):
         match = re.match(r"^\[*(--[a-z][a-z0-9-]*)(\]*)", word)
         if not match:
             continue
-        following = words[position + 1] if position + 1 < len(words) else ""
-        takes_value = (
-            not match.group(2)
-            and bool(following)
-            and not following.startswith(("--", "[", "|"))
-        )
-        flags[match.group(1)] = flags.get(match.group(1), False) or takes_value
+        values = 0
+        if not match.group(2):
+            for following in words[position + 1:]:
+                if following.startswith(("--", "[", "|")):
+                    break
+                values += 1
+                if "]" in following:
+                    break
+        flags[match.group(1)] = max(flags.get(match.group(1), 0), values)
     return pattern, flags
 
 
-def matches(tokens: list[str], usage: tuple[list, dict[str, bool]]) -> bool:
+def matches(tokens: list[str], usage: tuple[list, dict[str, int]]) -> bool:
     pattern, flags = usage
     position = 0
     index = 0
@@ -292,7 +294,7 @@ def matches(tokens: list[str], usage: tuple[list, dict[str, bool]]) -> bool:
                 continue
             if name not in flags:
                 return False
-            index += 2 if flags[name] and "=" not in token else 1
+            index += 1 if "=" in token else 1 + flags[name]
             continue
         if position >= len(pattern):
             if pattern and pattern[-1][2] and pattern[-1][0] == "placeholder":
@@ -307,13 +309,15 @@ def matches(tokens: list[str], usage: tuple[list, dict[str, bool]]) -> bool:
     return position == len(pattern)
 
 
-def collect_usage(commands: list[list[str]]) -> list[tuple[list, dict[str, bool]]]:
+def collect_usage(commands: list[list[str]]) -> list[tuple[list, dict[str, int]]]:
     binary = os.environ.get("LOGBREW_BIN", "logbrew")
     topics = {("--help",)}
     for tokens in commands:
         words = [token for token in tokens[1:] if not token.startswith("-")][:2]
         for word in words:
             topics.add((word, "--help"))
+        if len(words) == 2:
+            topics.add((*words, "--help"))
     lines: set[str] = set()
     for topic in sorted(topics):
         try:
