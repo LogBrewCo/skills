@@ -1,7 +1,7 @@
 {
   "name": "logbrew",
   "displayName": "LogBrew",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Fix production bugs with your coding agent. Connects the hosted LogBrew MCP server, with error tracking, performance monitoring, logs, and product analytics in one tool, and adds skills to debug an error, instrument an app, and check a release.",
   "author": {
     "name": "LogBrew",

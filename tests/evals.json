@@ -153,5 +153,26 @@
     ],
     "commands": [],
     "operations": []
+  },
+  {
+    "id": "product-sources-funnel-retention",
+    "skill": "product-analytics",
+    "prompt": "We promoted the site through a newsletter, a forum post, and ads. Where did new members come from, where do people drop off before they sign up, and how many came back?",
+    "description_terms": ["where users come from", "drop off", "come back", "traffic source"],
+    "steps": [
+      "Find the project and the events",
+      "Find where users come from",
+      "Measure conversion and drop-off",
+      "Check whether users come back",
+      "Read the sessions behind a number",
+      "Report"
+    ],
+    "commands": [
+      "logbrew analytics overview --project \"$PROJECT_ID\" --since 24h --json",
+      "logbrew analytics properties --project \"$PROJECT_ID\" --since 24h --json",
+      "logbrew analytics funnel --project \"$PROJECT_ID\" --since 24h --step page-view / --step page-view /signup --step interaction signup_completed --breakdown tag.utm_source --json",
+      "logbrew read actions --session \"$SESSION_ID\" --project \"$PROJECT_ID\" --since 24h --json"
+    ],
+    "operations": ["analytics.properties.v3", "analytics.funnel.v2", "analytics.retention.v3"]
   }
 ]

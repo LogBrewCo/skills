@@ -13,6 +13,7 @@ steps with the stack traces, logs, and counts that you give it.
 | --- | --- | --- |
 | [`debug-production`](plugins/logbrew/skills/debug-production/SKILL.md) | Finds the failing issue, reads its stack and first-seen release, pulls the logs and trace around the first event, checks who is affected, writes the fix, and checks that new events stop. | "Why did checkout break?" |
 | [`instrument-app`](plugins/logbrew/skills/instrument-app/SKILL.md) | Detects the framework, installs the matching LogBrew SDK, sets service, environment, and release, sends a test event, and reads it back. Includes logging rules that help with any tool. | "Add error tracking to this app." |
+| [`product-analytics`](plugins/logbrew/skills/product-analytics/SKILL.md) | Finds where users come from, measures conversion and drop-off by traffic source, checks who comes back, and backs each number with example sessions, the change from the previous period, and the sample size. | "Which campaign brought the most signups?" |
 | [`verify-release`](plugins/logbrew/skills/verify-release/SKILL.md) | Compares the issues, error logs, and trace error rate of a new release with the previous release, and decides go, rollback, or wait. | "Is the deploy safe?" |
 
 ## Install
@@ -84,6 +85,9 @@ plugins/logbrew/skills/
     SKILL.md
     references/frameworks.md       Install commands and setup code per framework
     references/logging-rules.md    Logging rules for any tool
+  product-analytics/
+    SKILL.md
+    references/operations.md       CLI commands, MCP operations, and the detail fields
   verify-release/
     SKILL.md
     references/operations.md       CLI commands and MCP operations
