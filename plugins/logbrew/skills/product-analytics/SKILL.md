@@ -99,6 +99,7 @@ Next: <one action, such as the source to fund or the step to fix>
 ```
 
 Confidence is low under 30 units in a group: say that 1 more conversion
-would move the rate a lot. A shared time range does not prove that one step
+would move the rate a lot. Call a change from the previous period real only
+when `rate_change_significant` is true. A shared time range does not prove that one step
 caused a drop. For a step that fails with errors, the debug-production
 skill finds the cause.
