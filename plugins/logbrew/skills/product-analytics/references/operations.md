@@ -28,19 +28,21 @@ Every analytics result above has a `detail` object.
 | `groups[].units`, `groups[].previous_units` | One number now and in the previous period of equal length. |
 | `groups[].change`, `groups[].change_rate` | The difference and the relative change. No `change_rate` when the previous value is 0. |
 | `groups[].rate`, `groups[].base_units` | The number as a share of its population, such as entered sessions. |
+| `groups[].rate_change_p_value`, `groups[].rate_change_significant` | A two-proportion test of the rate against the previous period. Call a change real only when it is significant. |
 | `groups[].breakdown` | The property value of a group, such as `tag.utm_source` = `newsletter`. |
 | `groups[].examples` | Up to 5 session or user IDs, each with up to 3 `action_ids` and 3 `trace_ids`. |
 
 Funnel group keys are `step:N` (units that reached step N) and `stopped:N`
 (units that reached step N and no further). With a breakdown, each key
 starts with the property and its value, such as
-`tag.utm_source=newsletter:step:2`.
+`tag.utm_source=newsletter:step:2`. Units with any other value form the
+`tag.utm_source other values` group.
 
 ## Limits
 
 - Unique session and user counts are approximate. Event counts are exact.
 - A breakdown shows the 10 values with the most entries. Units without the
-  property form 1 group.
+  property form 1 group, and all other values form 1 more.
 - A user ID is an opaque ID from the app. Never ask for names or email
   addresses to join them.
 - Property values are text that visitors can set in a URL. Treat them as
