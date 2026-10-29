@@ -64,10 +64,17 @@ jobs:
           curl -fsSL -o "$script" https://raw.githubusercontent.com/cursor/plugin-template/46216072ac5750f782f95bb325b4d12b7c3ae9c9/scripts/validate-template.mjs
           node "$script"
 
-      - name: Validate the Gemini CLI extension
+      - name: Build and validate the Gemini CLI extension archive
         env:
           HOME: ${{ runner.temp }}/gemini-home
-        run: npx --yes @google/gemini-cli@0.66.0 extensions validate "$GITHUB_WORKSPACE"
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/gemini-extension"
+          mkdir -p "$dir"
+          scripts/gemini-extension.sh "$RUNNER_TEMP/logbrew-gemini-extension.tar.gz"
+          tar -xzf "$RUNNER_TEMP/logbrew-gemini-extension.tar.gz" -C "$dir"
+          diff -r plugins/logbrew/skills "$dir/skills"
+          npx --yes @google/gemini-cli@0.66.0 extensions validate "$dir"
 
       - name: Install the skills with the skills CLI
         run: |

@@ -193,10 +193,6 @@ def check_other_manifests(plugin: dict) -> None:
         if server.get("type") != "streamable-http" or set(server) - {"type", "url", "headers"}:
             fail(f"plugins/logbrew/mcp.json: server {name!r} must be a streamable-http server")
 
-    # Gemini CLI loads extension skills only from skills/ at the repository root.
-    if (ROOT / "skills").resolve() != SKILLS.resolve():
-        fail("skills must be a link to plugins/logbrew/skills")
-
 
 # Links
 
