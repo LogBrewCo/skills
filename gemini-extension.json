@@ -1,0 +1,10 @@
+{
+  "name": "logbrew",
+  "version": "0.1.0",
+  "description": "Debug production errors, add error tracking and logs to an app, and check releases with LogBrew. Includes the hosted LogBrew MCP server.",
+  "mcpServers": {
+    "logbrew": {
+      "httpUrl": "https://mcp.logbrew.co/mcp"
+    }
+  }
+}
