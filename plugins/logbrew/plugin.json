@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "logbrew",
+  "version": "0.1.0",
+  "description": "Debug production errors, add error tracking and logs to an app, and check releases with LogBrew. Includes the hosted LogBrew MCP server.",
+  "author": {
+    "name": "LogBrew",
+    "email": "support@logbrew.co",
+    "url": "https://logbrew.co"
+  },
+  "homepage": "https://logbrew.co",
+  "repository": "https://github.com/LogBrewCo/skills",
+  "license": "MIT",
+  "keywords": ["logbrew", "debugging", "production error", "error tracking", "stack trace", "logging", "tracing", "observability", "release", "deploy", "rollback", "mcp"]
+}

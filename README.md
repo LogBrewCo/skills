@@ -36,6 +36,23 @@ On Claude Code versions before 2.1.275, add the marketplace first:
 /plugin install logbrew@logbrew
 ```
 
+Gemini CLI, with the skills and the LogBrew MCP server in 1 extension:
+
+```bash
+gemini extensions install https://github.com/LogBrewCo/skills
+```
+
+Then run `/mcp auth logbrew` in Gemini CLI to sign in.
+
+Cursor and Kiro read the plugin in [`plugins/logbrew/`](plugins/logbrew). It
+holds the skills and the LogBrew MCP server.
+
+- **Cursor.** Copy `plugins/logbrew` to `~/.cursor/plugins/local/logbrew`,
+  then run **Developer: Reload Window**.
+- **Kiro.** Clone this repository. In the Powers panel, select
+  **Add Custom Power**, then **Import power from a folder**, and choose
+  `plugins/logbrew`.
+
 Or copy a folder from [`plugins/logbrew/skills/`](plugins/logbrew/skills) into
 the skills folder of your agent. Each folder works alone.
 
@@ -75,14 +92,24 @@ plugins/logbrew/skills/
 ## Checks
 
 `python3 scripts/check.py` checks the skill format, the links, and the eval
-cases in [`tests/evals.json`](tests/evals.json). It also checks that every
-`logbrew` command matches the help of the installed CLI, and that every MCP
-operation and input field is in the published operation catalog. It makes no
-model calls. CI runs it against the newest CLI release on every pull request.
+cases in [`tests/evals.json`](tests/evals.json). It checks that the Claude
+Code, Gemini CLI, Cursor, and Agent Plugins manifests agree on the name,
+version, and MCP server. It also checks that every `logbrew` command matches
+the help of the installed CLI, and that every MCP operation and input field is
+in the published operation catalog. It makes no model calls. CI runs it
+against the newest CLI release on every pull request, with the plugin
+validators of Claude Code, Cursor, and Gemini CLI.
 
 Each eval case is a prompt with the steps, commands, and operations that the
 skill must give for it. To test a skill with a model, give the prompt to your
 agent with the skill installed and compare its steps with the case.
+
+## Privacy and support
+
+The skills send nothing on their own. The MCP server reads only the projects
+that you approve. Read the [LogBrew privacy policy](https://logbrew.co/privacy).
+For help, email [support@logbrew.co](mailto:support@logbrew.co) or
+[open an issue](https://github.com/LogBrewCo/skills/issues).
 
 ## License
 

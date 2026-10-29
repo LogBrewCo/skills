@@ -5,6 +5,8 @@ The checks are deterministic and make no model calls:
 
 - Skill frontmatter follows the Agent Skills format.
 - Plugin and marketplace manifests parse and point at existing paths.
+- The Gemini CLI, Cursor, and Agent Plugins manifests match the Claude Code
+  plugin in name, version, description, and MCP server URL.
 - Every relative Markdown link resolves.
 - Every `logbrew` command in a skill parses against the help of the
   installed CLI (set LOGBREW_BIN to use another binary).
@@ -128,6 +130,72 @@ def check_manifests() -> None:
     for name, server in plugin.get("mcpServers", {}).items():
         if not str(server.get("url", "")).startswith("https://"):
             fail(f"plugin.json: MCP server {name!r} must use an https URL")
+    check_other_manifests(plugin)
+
+
+AGENT_PLUGINS = "https://agent-plugins.org/schemas/1.0.0/"
+AGENT_PLUGIN_KEYS = {
+    "$schema", "name", "version", "description", "author", "homepage",
+    "repository", "license", "keywords", "extensions",
+}
+
+
+def load_json(path: Path) -> dict:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        fail(f"{rel(path)} does not parse: {error}")
+        return {}
+
+
+def check_other_manifests(plugin: dict) -> None:
+    """Keep the Gemini CLI, Cursor, and Agent Plugins manifests in step with
+    the Claude Code plugin: same name, version, and MCP server URL."""
+    url = plugin.get("mcpServers", {}).get("logbrew", {}).get("url")
+    gemini = load_json(ROOT / "gemini-extension.json")
+    cursor_market = load_json(ROOT / ".cursor-plugin" / "marketplace.json")
+    cursor = load_json(PLUGIN / ".cursor-plugin" / "plugin.json")
+    agent = load_json(PLUGIN / "plugin.json")
+    agent_mcp = load_json(PLUGIN / "mcp.json")
+    servers = {
+        "gemini-extension.json": gemini.get("mcpServers", {}).get("logbrew", {}).get("httpUrl"),
+        "plugins/logbrew/.cursor-plugin/plugin.json": cursor.get("mcpServers", {}).get("logbrew", {}).get("url"),
+        "plugins/logbrew/mcp.json": agent_mcp.get("mcpServers", {}).get("logbrew", {}).get("url"),
+    }
+    for path, value in servers.items():
+        if value != url:
+            fail(f"{path}: the logbrew MCP server URL must be {url}")
+    for path, manifest in {
+        "gemini-extension.json": gemini,
+        "plugins/logbrew/.cursor-plugin/plugin.json": cursor,
+        "plugins/logbrew/plugin.json": agent,
+    }.items():
+        for key in ("name", "version", "description"):
+            if manifest.get(key) != plugin.get(key):
+                fail(f"{path}: {key} must match plugins/logbrew/.claude-plugin/plugin.json")
+    if not any(entry.get("name") == plugin.get("name") and entry.get("source") == "plugins/logbrew"
+               for entry in cursor_market.get("plugins", [])):
+        fail(".cursor-plugin/marketplace.json must list the plugin with source plugins/logbrew")
+    logo = cursor.get("logo", "")
+    if ".." in logo or not (PLUGIN / logo).is_file():
+        fail("plugins/logbrew/.cursor-plugin/plugin.json: logo must be a file in the plugin")
+
+    # Agent Plugins 1.0.0 (Kiro powers and Cursor): closed key sets.
+    if agent.get("$schema") != AGENT_PLUGINS + "plugin.schema.json":
+        fail(f"plugins/logbrew/plugin.json: $schema must be {AGENT_PLUGINS}plugin.schema.json")
+    for key in agent.keys() - AGENT_PLUGIN_KEYS:
+        fail(f"plugins/logbrew/plugin.json: Agent Plugins does not allow the key {key!r}")
+    if not agent.get("keywords") or not agent.get("author", {}).get("name"):
+        fail("plugins/logbrew/plugin.json: Kiro needs keywords and an author name")
+    if agent_mcp.get("$schema") != AGENT_PLUGINS + "mcp.schema.json" or set(agent_mcp) != {"$schema", "mcpServers"}:
+        fail(f"plugins/logbrew/mcp.json: needs only $schema {AGENT_PLUGINS}mcp.schema.json and mcpServers")
+    for name, server in agent_mcp.get("mcpServers", {}).items():
+        if server.get("type") != "streamable-http" or set(server) - {"type", "url", "headers"}:
+            fail(f"plugins/logbrew/mcp.json: server {name!r} must be a streamable-http server")
+
+    # Gemini CLI loads extension skills only from skills/ at the repository root.
+    if (ROOT / "skills").resolve() != SKILLS.resolve():
+        fail("skills must be a link to plugins/logbrew/skills")
 
 
 # Links
