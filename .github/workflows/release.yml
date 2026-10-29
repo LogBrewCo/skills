@@ -1,0 +1,46 @@
+name: Release
+
+# Publishes the Gemini CLI extension archive when the version in
+# gemini-extension.json has no release yet. Gemini CLI installs the newest
+# release and offers updates when a newer one appears.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Publish the release for a new version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="v$(jq -r .version gemini-extension.json)"
+          if gh release view "$tag" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "$tag is already released"
+            exit 0
+          fi
+          archive="$RUNNER_TEMP/logbrew-gemini-extension.tar.gz"
+          scripts/gemini-extension.sh "$archive"
+          gh release create "$tag" "$archive" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "$tag" \
+            --notes "The LogBrew skills and the hosted LogBrew MCP server. Install the Gemini CLI extension with \`gemini extensions install https://github.com/LogBrewCo/skills\`."
