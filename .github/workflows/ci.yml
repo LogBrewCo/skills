@@ -83,7 +83,7 @@ jobs:
           mkdir -p "$target"
           cd "$target"
           npx --yes skills@1.7.4 add "$GITHUB_WORKSPACE" --skill '*' -a codex -y --copy --json > result.json
-          jq -e 'length == 3 and all(.status == "installed")' result.json
+          jq -e 'length == 4 and all(.status == "installed")' result.json
           for skill in "$GITHUB_WORKSPACE"/plugins/logbrew/skills/*/; do
             name="$(basename "$skill")"
             diff -r "$skill" ".agents/skills/$name"
