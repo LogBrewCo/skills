@@ -285,7 +285,6 @@ gem "logbrew-sdk", "~> 0.1.17"
 ```
 
 ```bash
-bundle install
 export LOGBREW_SERVER_API_KEY="your project-scoped server ingest key"
 bin/rails server
 ```
