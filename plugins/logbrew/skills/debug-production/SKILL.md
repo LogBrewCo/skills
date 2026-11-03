@@ -1,13 +1,21 @@
 ---
 name: debug-production
-description: Investigate a production bug in a fixed order. Find the failing issue, read its stack and first-seen release, pull the logs and trace around the first event, check who is affected, state what is unknown, fix it, then check that new events stop. Use when someone asks why something broke in production, why checkout or login fails, what an error or stack trace means, or to debug a crash, exception, 500 error, or error spike. Reads LogBrew through its MCP server or the logbrew CLI, and works from a pasted stack trace and logs when no tool is connected.
+description: Investigate a production bug in a fixed order. Find the failing issue, read its stack and first-seen release, pull the logs and trace around the first event, check who is affected, state what is unknown, propose a fix and write it after the person says yes, then check that new events stop. Use when someone asks why something broke in production, why checkout or login fails, what an error or stack trace means, or to debug a crash, exception, 500 error, or error spike. Reads LogBrew through its MCP server or the logbrew CLI, and works from a pasted stack trace and logs when no tool is connected.
 license: MIT
 ---
 
 # Debug production
 
-Follow the 7 steps in order. Do not skip a step. Do not edit code before
-step 6.
+Follow the 7 steps in order. Do not skip a step. Do not change any file
+before the person says yes in step 6.
+
+## Ask first
+
+Some steps create, install, record, or change something. Those steps say
+**Ask first**. Before you do such a step, show the person the exact command
+or change, with every value filled in. Then wait for their yes. The request
+that started the task is not a yes. Without a yes, skip the step and say so
+in the report.
 
 ## Choose the evidence source
 
@@ -109,13 +117,20 @@ limits your conclusion. Stop and report without a code change if:
 - the fix depends on redacted evidence;
 - you cannot reproduce the failure or explain it from the evidence.
 
+Then give the person the report below, with the fix that you propose. If
+the person asked only what broke, stop here.
+
 ### 6. Write the fix
+
+**Ask first.** Show the test and the code change that you propose, file by
+file. A question about what broke is not a yes to change code.
 
 Write a test that fails the same way. Build its input from the observed
 shape of the failing request, never from real user data. Then make the
 smallest change at the cause. Do not hide the error with a broad catch, a
-retry, or a lower log level. Add the investigation record (see the report
-below) to the pull request.
+retry, or a lower log level. Commit, push, or open a pull request only when
+the person asks. Add the investigation record (see the report below) to
+the pull request.
 
 ### 7. Check that new events stop
 
@@ -137,8 +152,9 @@ Read the verify `status`:
 | `insufficient_traffic` | Not enough traffic yet. Check again later. |
 | `unavailable` | LogBrew could not read the evidence. Check again later. |
 
-Change the issue status only when the person permits it, for example
-`logbrew resolve "$ISSUE_ID" --json`. Archiving an issue is not a fix.
+Change the issue status only when the person asks. **Ask first** and show
+the command, for example `logbrew resolve "$ISSUE_ID" --json`. Archiving
+an issue is not a fix.
 
 ## Report
 

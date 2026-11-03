@@ -12,6 +12,10 @@ The checks are deterministic and make no model calls:
   installed CLI (set LOGBREW_BIN to use another binary).
 - Every MCP operation and listed input field exists in the published
   operation catalog (set MCP_CATALOG to a local file to skip the download).
+- Every `logbrew` command is a known read or write. Every write, every other
+  shell command in a SKILL.md, and every "Run the ... command" step sits in
+  a step or table row that says "Ask first", and each skill with a write
+  defines "Ask first" in its SKILL.md.
 - Every eval case in tests/evals.json finds its steps in order, its commands,
   and its operations in the skill.
 
@@ -378,6 +382,101 @@ def check_operations(path: Path, text: str, catalog: dict[str, set[str]]) -> Non
                 fail(f"{rel(path)}: {operation} has no input field {field}")
 
 
+# Writes
+
+# Longer prefixes come first. A "person" command is one that the skill asks a
+# person to run, such as a login.
+COMMAND_KINDS = (
+    (("projects", "keys", "create"), "write"),
+    (("projects", "create"), "write"),
+    (("deploy",), "write"),
+    (("resolve",), "write"),
+    (("login",), "person"),
+    (("projects",), "read"),
+    (("read",), "read"),
+    (("investigate",), "read"),
+    (("explain",), "read"),
+    (("watch",), "read"),
+    (("traces",), "read"),
+    (("analytics",), "read"),
+    (("status",), "read"),
+    (("setup",), "read"),
+)
+ASK = "ask first"
+ASK_HEADING = "\n## Ask first\n"
+RUN_STEP_RE = re.compile(r"\bRun the [a-z ]*command\b")
+SEEDED_WRITES = (
+    ("### 2. Record\n\n```bash\nlogbrew deploy d --json\n```\n", True, 1),
+    ("### 2. Record\n\n**Ask first.** Show it.\n\n```bash\nlogbrew deploy d --json\n```\n", True, 0),
+    ("### 3. Ask first\n\nShow it.\n\n### 4. Install\n\n```bash\nnpm install x\n```\n", True, 1),
+    ("### 4. Install\n\n1. Run the install command from step 2.\n", True, 1),
+    ("| Step | CLI |\n| ask first | `logbrew deploy d --json` |\n| 2 | `logbrew resolve i --json` |\n", False, 1),
+    ("Run `logbrew delete project p --json`.\n", False, 1),
+)
+
+
+def command_kind(command: str) -> str | None:
+    if command.endswith(" --help"):
+        return "read"
+    words = [token for token in (command_tokens(command) or [])[1:] if not token.startswith("-")]
+    for prefix, kind in COMMAND_KINDS:
+        if tuple(words[: len(prefix)]) == prefix:
+            return kind
+    return None
+
+
+def unasked_writes(text: str, skill_file: bool) -> tuple[list[str], int]:
+    """Return the writes that no "Ask first" covers, and the number of writes."""
+    problems: list[str] = []
+    writes = 0
+    section = ""
+    fence: str | None = None
+    for line in text.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            fence = None if fence is not None else stripped[3:].strip()
+            continue
+        if fence is None and stripped.startswith("#"):
+            section = ""
+        found: list[str] = []
+        if fence in ("bash", "sh"):
+            if stripped.startswith("logbrew "):
+                found.append(stripped)
+            elif skill_file and stripped and not stripped.startswith("#"):
+                found.append(f"write: {stripped}")
+        elif fence is None:
+            found.extend(re.findall(r"`(logbrew [^`]+)`", line))
+            if skill_file and RUN_STEP_RE.search(line):
+                found.append(f"write: {RUN_STEP_RE.search(line).group(0)}")
+        context = line if stripped.startswith("|") else f"{section} {line}"
+        for command in found:
+            kind = "write" if command.startswith("write: ") else command_kind(command)
+            if kind is None:
+                problems.append(f"add the command to COMMAND_KINDS as a read or a write: {command}")
+            elif kind == "write":
+                writes += 1
+                if ASK not in context.lower():
+                    problems.append(f"say \"Ask first\" in the step or table row before: {command.removeprefix('write: ')}")
+        section += " " + line
+    return problems, writes
+
+
+def check_writes() -> None:
+    for skill_dir in sorted(p for p in SKILLS.iterdir() if p.is_dir()):
+        total = 0
+        for path in sorted(skill_dir.rglob("*.md")):
+            problems, writes = unasked_writes(path.read_text(encoding="utf-8"), path.name == "SKILL.md")
+            total += writes
+            for problem in problems:
+                fail(f"{rel(path)}: {problem}")
+        skill = skill_dir / "SKILL.md"
+        if total and skill.is_file() and ASK_HEADING not in skill.read_text(encoding="utf-8"):
+            fail(f"{rel(skill)}: has a write, so it must define \"## Ask first\"")
+    for text, skill_file, expected in SEEDED_WRITES:
+        if len(unasked_writes(text, skill_file)[0]) != expected:
+            fail(f"self-test: expected {expected} unasked write(s) in seeded text {text!r}")
+
+
 # Evals
 
 
@@ -440,6 +539,7 @@ def main() -> int:
         fields = check_skill(skill_dir)
         descriptions[skill_dir.name] = fields.get("description", "")
     check_manifests()
+    check_writes()
 
     markdown = [ROOT / "README.md", *sorted(SKILLS.rglob("*.md"))]
     for path in markdown:

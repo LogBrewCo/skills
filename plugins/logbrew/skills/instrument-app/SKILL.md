@@ -1,6 +1,6 @@
 ---
 name: instrument-app
-description: Add error tracking, structured logs, and tracing to an app, then prove it works by reading a test event back. Use when someone asks to add error tracking, logging, monitoring, observability, or tracing, to set up LogBrew or install its SDK, or to check that events arrive. Detects the framework with logbrew setup --json, installs the matching SDK, sets service, environment, and release, sends one test event, and reads it back. Includes logging rules that help with any tool.
+description: Add error tracking, structured logs, and tracing to an app, then prove it works by reading a test event back. Use when someone asks to add error tracking, logging, monitoring, observability, or tracing, to set up LogBrew or install its SDK, or to check that events arrive. Detects the framework with logbrew setup --json, installs the matching SDK, sets service, environment, and release, sends one test event, and reads it back. Shows each command and file change and waits for a yes before it creates a project or key, installs a package, or edits a file. Includes logging rules that help with any tool.
 license: MIT
 ---
 
@@ -26,6 +26,14 @@ event back from LogBrew with the right service, environment, and release.
 - Follow [references/logging-rules.md](references/logging-rules.md) for
   every log and event that you add.
 
+## Ask first
+
+Some steps create, install, record, or change something. Those steps say
+**Ask first**. Before you do such a step, show the person the exact command
+or change, with every value filled in. Then wait for their yes. The request
+that started the task is not a yes. Without a yes, skip the step and say so
+in the report.
+
 ## Steps
 
 ### 1. Read the app
@@ -43,10 +51,10 @@ logbrew setup --json
 ```
 
 Read `detected` (manifest, runtime, package manager). When `install_plan`
-is not `null`, use `install_plan.install_command`, check each item in
-`install_plan.compatibility`, and read `install_plan.surfaces` for the key
-kind that each surface needs. When `install_plan` is `null`, select the
-package from [references/frameworks.md](references/frameworks.md).
+is not `null`, note `install_plan.install_command` for step 4, check each
+item in `install_plan.compatibility`, and read `install_plan.surfaces` for
+the key kind that each surface needs. When `install_plan` is `null`, select
+the package from [references/frameworks.md](references/frameworks.md).
 
 If the `logbrew` CLI is not installed, ask the person to install it. The
 [CLI guide](https://docs.logbrew.co/guides/cli#install-the-cli) lists the
@@ -63,6 +71,9 @@ If it reports no authentication, ask a person to run `logbrew login` once,
 then continue. Then create a project, or a key for an existing project. The
 CLI writes the key to a new owner-only file and never prints it.
 
+**Ask first.** Show the `install` command and the 1 `logbrew` command that
+you will run, with the name, runtime, and file path filled in.
+
 ```bash
 install -d -m 700 "$HOME/.logbrew"
 logbrew projects create "$APP_NAME" --runtime "$RUNTIME" --environment development --ingest-key-file "$HOME/.logbrew/$APP_NAME.ingest" --json
@@ -75,6 +86,9 @@ result. The destination file must not exist. If the result is unclear, run
 the same command again; the CLI reuses its pending request.
 
 ### 4. Install the SDK and add the setup code
+
+**Ask first.** Show the install command from step 2 and the change to each
+file. Run or change nothing before the person says yes.
 
 1. Run the install command from step 2.
 2. Add the setup code from [references/frameworks.md](references/frameworks.md)
@@ -90,6 +104,9 @@ the same command again; the CLI reuses its pending request.
    current logs flow without code changes at each call.
 
 ### 5. Send 1 test event
+
+**Ask first.** Say which route you will request, which message you will
+log, and whether you will trigger a test error.
 
 Send the event through the real code path. Request a route that the app
 already has, or log 1 `info` message with a unique marker, such as
