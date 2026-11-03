@@ -35,7 +35,7 @@ Read access comes from one of 2 sources:
 | 3. Error traces | `logbrew traces --project "$PROJECT_ID" --service "$SERVICE" --status error --since 24h --json` | Failed requests |
 | 7. Verify a fix | `logbrew investigate issue "$ISSUE_ID" verify --baseline-occurrence "$OCCURRENCE_ID" --candidate-deployment "$DEPLOYMENT_ID" --json` | `status`: `recurrence_observed`, `no_recurrence_observed`, `insufficient_traffic`, or `unavailable` |
 | 7. Watch live | `logbrew watch issues --json` | New issue events as they arrive |
-| After approval | `logbrew resolve "$ISSUE_ID" --json` | Changes issue status; only with permission |
+| After approval | `logbrew resolve "$ISSUE_ID" --json` | Changes issue status. Ask first: show the command and wait for a yes |
 
 `--since` takes a duration such as `30m`, `24h`, or `7d`, or an RFC 3339
 time. `--until` is an RFC 3339 time and is exclusive. Severity values are

@@ -10,7 +10,7 @@ input fields that its schema returns.
 | Step | CLI | MCP operation and input fields |
 | --- | --- | --- |
 | 1. List releases | `logbrew read releases --project "$PROJECT_ID" --environment production --since 24h --json` | `releases.list.v1`: `project_id`, `environment`, `service_name`, `since` |
-| 2. Record a deployment | `logbrew deploy "$DEPLOYMENT_ID" --project "$PROJECT_ID" --release "$RELEASE" --environment production --service "$SERVICE" --status succeeded --started-at "$STARTED_AT" --finished-at "$FINISHED_AT" --json` | Not available; the MCP server only reads |
+| 2. Record a deployment (ask first: show the command and wait for a yes) | `logbrew deploy "$DEPLOYMENT_ID" --project "$PROJECT_ID" --release "$RELEASE" --environment production --service "$SERVICE" --status succeeded --started-at "$STARTED_AT" --finished-at "$FINISHED_AT" --json` | Not available; the MCP server only reads |
 | 3. Compare with the previous release | `logbrew explain release "$RELEASE" --project "$PROJECT_ID" --environment production --service "$SERVICE" --json` | `releases.investigate.v5`: `project_id`, `release`, `environment`, `service_name` |
 | 4. Issues of the release | `logbrew read issues --project "$PROJECT_ID" --release "$RELEASE" --environment production --service "$SERVICE" --status unresolved --since "$DEPLOYED_AT" --json` | `issues.list.v5`: `project_id`, `release`, `environment`, `service_name`, `status`, `since` |
 | 4. First-seen release of an issue | `logbrew investigate issue "$ISSUE_ID" --occurrence first --json` | `issues.investigate.v15`: `issue_id`, `selection` |
@@ -36,8 +36,8 @@ input fields that its schema returns.
 | `comparison.reason` | Next step |
 | --- | --- |
 | `deployment_comparison_available` | Read `comparison.details`. |
-| `subject_deployment_not_found` | Record the deployment of the new release. |
-| `previous_successful_deployment_not_found` | Record the deployment of the previous release. |
+| `subject_deployment_not_found` | Ask first, then record the deployment of the new release. |
+| `previous_successful_deployment_not_found` | Ask first, then record the deployment of the previous release. |
 | `previous_release_telemetry_not_found` | The previous release has no retained telemetry. Decide from issues and logs. |
 | `deployment_read_unavailable` or `previous_release_read_unavailable` | Read again later. Decide **Wait**. |
 | `comparison_evidence_invalid` or `comparison_values_out_of_range` | LogBrew cannot compare the 2 releases safely. Decide from issues and logs. |

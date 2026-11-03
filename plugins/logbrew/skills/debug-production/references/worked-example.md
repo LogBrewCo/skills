@@ -6,8 +6,8 @@ real. It shows the order of the steps and what to record at each one.
 The person asks: "Checkout started failing about an hour ago. Why?"
 
 Scope from the person: project `00000000-0000-4000-8000-000000000001`,
-environment `production`, service `checkout-api`. Reads only, no code
-changes until the cause is clear.
+environment `production`, service `checkout-api`. Reads only. No code
+changes without the person's yes.
 
 ## Access
 
@@ -84,9 +84,13 @@ Report: checkout fails for carts without a discount code since the
 - Exception messages from users' input are not part of this issue.
 
 None of these block a fix: the failing frame is in our code and the input
-shape is clear.
+shape is clear. The person asked why checkout broke, so give the report
+with the proposed fix and stop.
 
 ## 6. Write the fix
+
+Asked first: the proposed test and change in `src/pricing/applyDiscount.ts`.
+The person says yes.
 
 Test first: a cart with `discountCode: null` and no `discount` object must
 return the full price. It fails with the same `TypeError`. Then the fix:

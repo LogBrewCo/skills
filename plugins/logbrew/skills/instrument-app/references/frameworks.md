@@ -12,6 +12,9 @@ detected project in `install_plan.install_command`. The
 [SDK guide](https://docs.logbrew.co/guides/sdk-ingestion#package-manager-installs)
 shows the install command for each package manager.
 
+Show the person each install command and code change, and wait for a yes
+before you apply it.
+
 ## Packages
 
 | Runtime or framework | Packages | Package README |

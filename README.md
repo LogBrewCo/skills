@@ -11,7 +11,7 @@ steps with the stack traces, logs, and counts that you give it.
 
 | Skill | What it does | Ask your agent |
 | --- | --- | --- |
-| [`debug-production`](plugins/logbrew/skills/debug-production/SKILL.md) | Finds the failing issue, reads its stack and first-seen release, pulls the logs and trace around the first event, checks who is affected, writes the fix, and checks that new events stop. | "Why did checkout break?" |
+| [`debug-production`](plugins/logbrew/skills/debug-production/SKILL.md) | Finds the failing issue, reads its stack and first-seen release, pulls the logs and trace around the first event, checks who is affected, proposes the fix and writes it after you say yes, and checks that new events stop. | "Why did checkout break?" |
 | [`instrument-app`](plugins/logbrew/skills/instrument-app/SKILL.md) | Detects the framework, installs the matching LogBrew SDK, sets service, environment, and release, sends a test event, and reads it back. Includes logging rules that help with any tool. | "Add error tracking to this app." |
 | [`product-analytics`](plugins/logbrew/skills/product-analytics/SKILL.md) | Finds where users come from, measures conversion and drop-off by traffic source, checks who comes back, and backs each number with example sessions, the change from the previous period, and the sample size. | "Which campaign brought the most signups?" |
 | [`verify-release`](plugins/logbrew/skills/verify-release/SKILL.md) | Compares the issues, error logs, and trace error rate of a new release with the previous release, and decides go, rollback, or wait. | "Is the deploy safe?" |
@@ -110,8 +110,11 @@ agent with the skill installed and compare its steps with the case.
 
 ## Privacy and support
 
-The skills send nothing on their own. The MCP server reads only the projects
-that you approve. Read the [LogBrew privacy policy](https://logbrew.co/privacy).
+The skills send nothing on their own. Before a skill creates a project or
+key, installs a package, edits a file, records a deployment, or changes an
+issue, it shows you the exact command or change and waits for your yes. The
+MCP server reads only the projects that you approve. Read the
+[LogBrew privacy policy](https://logbrew.co/privacy).
 For help, email [support@logbrew.co](mailto:support@logbrew.co) or
 [open an issue](https://github.com/LogBrewCo/skills/issues).
 
