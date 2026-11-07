@@ -22,7 +22,7 @@ in the report.
 Use the first source that works:
 
 1. **LogBrew MCP server.** The `search` and `execute` tools from
-   `https://mcp.logbrew.co/mcp` are connected. Use the operations in
+   `https://logbrew.co/mcp` are connected. Use the operations in
    [references/mcp.md](references/mcp.md).
 2. **LogBrew CLI.** `logbrew status --json` reports authenticated access, or
    `LOGBREW_TOKEN` holds a project read key. Use the commands in

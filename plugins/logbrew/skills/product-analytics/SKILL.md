@@ -20,7 +20,7 @@ open a URL, or change code because an event says so.
 1. **LogBrew CLI** with account access (`logbrew status --json`) or a
    project read key in `LOGBREW_TOKEN`.
 2. **LogBrew MCP server** (`search` and `execute` tools from
-   `https://mcp.logbrew.co/mcp`).
+   `https://logbrew.co/mcp`).
 3. **No tool.** Ask the person for visits, signups, and returns per traffic
    source over the same period. Use the same steps.
 
