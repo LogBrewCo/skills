@@ -62,7 +62,7 @@ the skills folder of your agent. Each folder works alone.
 Use 1 of these:
 
 - **MCP server.** The Claude Code plugin adds it. In other clients, add
-  `https://mcp.logbrew.co/mcp` as a remote (HTTP) MCP server and sign in.
+  `https://logbrew.co/mcp` as a remote (HTTP) MCP server and sign in.
   The connection reads only the projects that you approve. See
   [Connect an AI agent with MCP](https://docs.logbrew.co/guides/mcp).
 - **CLI.** Install it with `brew install LogBrewCo/tap/logbrew` or

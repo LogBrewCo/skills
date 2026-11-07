@@ -2,7 +2,7 @@
 
 Every command here is in the help of the released `logbrew` CLI. Every
 operation is in the catalog of the hosted MCP server at
-`https://mcp.logbrew.co/mcp`. Call `search` before `execute` and use the
+`https://logbrew.co/mcp`. Call `search` before `execute` and use the
 input fields that its schema returns.
 
 ## Commands and operations by step

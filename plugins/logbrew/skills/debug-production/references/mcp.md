@@ -1,6 +1,6 @@
 # LogBrew MCP map for debugging
 
-The hosted LogBrew MCP server is at `https://mcp.logbrew.co/mcp`. It can only
+The hosted LogBrew MCP server is at `https://logbrew.co/mcp`. It can only
 read, and only the projects that the person approved when they connected.
 
 ## Connect
@@ -8,14 +8,14 @@ read, and only the projects that the person approved when they connected.
 Claude Code:
 
 ```bash
-claude mcp add --transport http logbrew https://mcp.logbrew.co/mcp
+claude mcp add --transport http logbrew https://logbrew.co/mcp
 claude mcp login logbrew
 ```
 
 Codex:
 
 ```bash
-codex mcp add logbrew --url https://mcp.logbrew.co/mcp
+codex mcp add logbrew --url https://logbrew.co/mcp
 codex mcp login logbrew
 ```
 

@@ -27,7 +27,7 @@ in the report.
 1. **LogBrew CLI** with account access (`logbrew status --json`) or a
    project read key in `LOGBREW_TOKEN`. The CLI can also record deployments.
 2. **LogBrew MCP server** (`search` and `execute` tools from
-   `https://mcp.logbrew.co/mcp`). It reads only; it cannot record a
+   `https://logbrew.co/mcp`). It reads only; it cannot record a
    deployment.
 3. **No tool.** Ask the person for these numbers for the new and the
    previous release, over windows of the same length: request count, error
