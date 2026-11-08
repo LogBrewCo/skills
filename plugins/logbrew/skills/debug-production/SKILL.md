@@ -1,6 +1,6 @@
 ---
 name: debug-production
-description: Investigate a production bug in a fixed order. Find the failing issue, read its stack and first-seen release, pull the logs and trace around the first event, check who is affected, state what is unknown, propose a fix and write it after the person says yes, then check that new events stop. Use when someone asks why something broke in production, why checkout or login fails, what an error or stack trace means, or to debug a crash, exception, 500 error, or error spike. Reads LogBrew through its MCP server or the logbrew CLI, and works from a pasted stack trace and logs when no tool is connected.
+description: Ask your agent why production broke. It reads the error, stack trace, logs, and trace in LogBrew and helps you fix the bug. Use when someone asks why something broke in production, why checkout or login fails, what an error or stack trace means, or to debug a crash, exception, 500 error, or error spike. Works with the LogBrew MCP server or the logbrew CLI, or from a pasted stack trace and logs.
 license: MIT
 ---
 
