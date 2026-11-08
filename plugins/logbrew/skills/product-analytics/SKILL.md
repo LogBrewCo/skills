@@ -1,6 +1,6 @@
 ---
 name: product-analytics
-description: Get clear answers about how people use your product: where users come from, where they drop off in a conversion funnel, and whether they come back. Use when someone asks about signups, conversion, funnels, drop-off, retention, returning users, traffic sources, UTM tags, referrers, or what users do on a page. Answers come from LogBrew product analytics through the logbrew CLI or MCP server, with the numbers behind each one.
+description: Get clear answers about how people use your product. See where users come from, where they drop off in a conversion funnel, and whether they come back. Use when someone asks about signups, conversion, funnels, drop-off, retention, returning users, traffic sources, UTM tags, referrers, or what users do on a page. Answers come from LogBrew product analytics through the logbrew CLI or MCP server, with the numbers behind each one.
 license: MIT
 ---
 
