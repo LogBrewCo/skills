@@ -1,6 +1,6 @@
 ---
 name: verify-release
-description: Decide go or rollback after a deploy. Compare the new release's issues, error logs, and trace error rate with the previous release, then report the decision with evidence. Use when someone asks if a deploy is safe, whether a release broke anything, to check a canary or rollout, to compare 2 versions, or whether to roll back. Reads LogBrew release comparisons through the logbrew CLI or MCP server, and works from exported error and request counts when no tool is connected.
+description: Know if a deploy is safe. Your agent compares the new release with the previous one in LogBrew and tells you to keep it or roll back. Use when someone asks if a deploy is safe, whether a release broke anything, to check a canary release or rollout, to compare 2 versions, or whether a rollback is needed. Works with the LogBrew MCP server or the logbrew CLI, or from exported error and request counts.
 license: MIT
 ---
 

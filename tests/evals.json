@@ -30,7 +30,7 @@
     "id": "debug-what-broke-stops",
     "skill": "debug-production",
     "prompt": "Login has failed in production since the last deploy. What broke?",
-    "description_terms": ["login fails", "after the person says yes"],
+    "description_terms": ["login fails", "helps you fix"],
     "steps": [
       "Do not change any file before the person says yes",
       "Find the failing issue",
@@ -76,7 +76,7 @@
     "id": "instrument-fastapi",
     "skill": "instrument-app",
     "prompt": "Add error tracking to my FastAPI service.",
-    "description_terms": ["add error tracking", "logbrew setup --json"],
+    "description_terms": ["add error tracking", "right SDK"],
     "steps": [
       "Read the app",
       "Detect the framework",
@@ -119,7 +119,7 @@
     "id": "instrument-check-arrival",
     "skill": "instrument-app",
     "prompt": "I added the SDK and the send returned 202. Are my events arriving?",
-    "description_terms": ["check that events arrive", "reads it back"],
+    "description_terms": ["check that events arrive", "first event"],
     "steps": [
       "An accepted send is not proof",
       "Read the event back",

@@ -1,6 +1,6 @@
 ---
 name: instrument-app
-description: Add error tracking, structured logs, and tracing to an app, then prove it works by reading a test event back. Use when someone asks to add error tracking, logging, monitoring, observability, or tracing, to set up LogBrew or install its SDK, or to check that events arrive. Detects the framework with logbrew setup --json, installs the matching SDK, sets service, environment, and release, sends one test event, and reads it back. Shows each command and file change and waits for a yes before it creates a project or key, installs a package, or edits a file. Includes logging rules that help with any tool.
+description: Add error tracking, logs, and tracing to your app in minutes, and see your first event in LogBrew. Use when someone asks to add error tracking, logging, application monitoring, observability, performance monitoring, or tracing, to set up LogBrew or install its SDK, or to check that events arrive. Picks the right SDK for your framework. Includes logging tips that help with any tool.
 license: MIT
 ---
 
