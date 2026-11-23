@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "logbrew",
-  "version": "0.3.4",
-  "description": "Fix production bugs with your coding agent. Connects the hosted LogBrew MCP server, with error tracking, performance monitoring, logs, and product analytics in one tool, and adds skills to debug an error, instrument an app, and check a release.",
+  "version": "0.3.5",
+  "description": "Error tracking, logs, APM, and product analytics your AI agent can read. Generous free tier, no card needed. Connects the hosted LogBrew MCP server and adds 4 skills to debug a production error, add error tracking to an app, read product analytics, and check a release.",
   "author": {
     "name": "LogBrew",
     "email": "support@logbrew.co",
@@ -11,5 +11,49 @@
   "homepage": "https://logbrew.co",
   "repository": "https://github.com/LogBrewCo/skills",
   "license": "MIT",
-  "keywords": ["logbrew", "debugging", "production error", "error tracking", "stack trace", "logging", "tracing", "observability", "release", "deploy", "rollback", "mcp", "performance monitoring", "crash reporting", "product analytics"]
+  "keywords": [
+    "logbrew",
+    "debugging",
+    "production error",
+    "error tracking",
+    "stack trace",
+    "logging",
+    "tracing",
+    "observability",
+    "release",
+    "deploy",
+    "rollback",
+    "mcp",
+    "performance monitoring",
+    "crash reporting",
+    "product analytics"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "LogBrew",
+        "shortDescription": "Find and fix production bugs",
+        "longDescription": "LogBrew is error tracking, logs, APM, and product analytics in one tool. The generous free tier includes 100k errors and 50 GB of logs a month, with no card needed.\n\nConnect LogBrew, then ask what broke after the last release, why a request was slow, or which users hit an error. The agent reads the issue, its stack trace, the logs and trace around the first event, and the affected users, then proposes a fix. The plugin also adds skills to add error tracking to an app, read product analytics, and check whether a release is safe.\n\nLogBrew reads only the projects you approve when you sign in.",
+        "developerName": "LogBrew",
+        "category": "Developer Tools",
+        "capabilities": [
+          "Read errors, logs, and traces",
+          "Read product analytics",
+          "Update issues",
+          "Add error tracking to an app"
+        ],
+        "websiteURL": "https://logbrew.co",
+        "supportURL": "https://logbrew.co/en/contact",
+        "privacyPolicyURL": "https://logbrew.co/en/privacy",
+        "termsOfServiceURL": "https://logbrew.co/en/terms",
+        "defaultPrompt": [
+          "Why did checkout break after the last deploy?",
+          "Add error tracking to this app.",
+          "Is the latest release safe to keep?"
+        ],
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      }
+    }
+  }
 }
