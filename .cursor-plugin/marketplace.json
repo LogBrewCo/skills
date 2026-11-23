@@ -11,7 +11,7 @@
     {
       "name": "logbrew",
       "source": "plugins/logbrew",
-      "description": "Fix production bugs with your coding agent. Connects the hosted LogBrew MCP server, with error tracking, performance monitoring, logs, and product analytics in one tool, and adds skills to debug an error, instrument an app, and check a release."
+      "description": "Error tracking, logs, APM, and product analytics your AI agent can read. Generous free tier, no card needed. Connects the hosted LogBrew MCP server and adds 4 skills to debug a production error, add error tracking to an app, read product analytics, and check a release."
     }
   ]
 }

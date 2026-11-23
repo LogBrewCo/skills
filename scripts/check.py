@@ -7,6 +7,8 @@ The checks are deterministic and make no model calls:
 - Plugin and marketplace manifests parse and point at existing paths.
 - The Gemini CLI, Cursor, and Agent Plugins manifests match the Claude Code
   plugin in name, version, description, and MCP server URL.
+- The Claude and OpenAI directory fields point at existing files and stay
+  within the directory limits.
 - Every relative Markdown link resolves.
 - Every `logbrew` command in a skill parses against the help of the
   installed CLI (set LOGBREW_BIN to use another binary).
@@ -191,6 +193,7 @@ def check_other_manifests(plugin: dict) -> None:
         fail(f"plugins/logbrew/plugin.json: Agent Plugins does not allow the key {key!r}")
     if not agent.get("keywords") or not agent.get("author", {}).get("name"):
         fail("plugins/logbrew/plugin.json: Kiro needs keywords and an author name")
+    check_listing_assets(plugin, agent)
     if agent_mcp.get("$schema") != AGENT_PLUGINS + "mcp.schema.json" or set(agent_mcp) != {"$schema", "mcpServers"}:
         fail(f"plugins/logbrew/mcp.json: needs only $schema {AGENT_PLUGINS}mcp.schema.json and mcpServers")
     for name, server in agent_mcp.get("mcpServers", {}).items():
@@ -199,6 +202,32 @@ def check_other_manifests(plugin: dict) -> None:
 
 
 # Links
+
+
+def plugin_file(path: str) -> bool:
+    return path.startswith("./") and ".." not in path and (PLUGIN / path).is_file()
+
+
+def check_listing_assets(plugin: dict, agent: dict) -> None:
+    """The Claude and OpenAI directories read the icon and listing fields from
+    these manifests."""
+    if not plugin_file(plugin.get("icon", "")):
+        fail("plugins/logbrew/.claude-plugin/plugin.json: icon must be a ./ path to a file in the plugin")
+    for key in ("documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"):
+        if not str(plugin.get(key, "")).startswith("https://"):
+            fail(f"plugins/logbrew/.claude-plugin/plugin.json: {key} must be an https URL")
+    ui = agent.get("extensions", {}).get("com.openai", {}).get("interface", {})
+    for key, limit in (("displayName", 30), ("shortDescription", 30), ("longDescription", 4000)):
+        if not 1 <= len(ui.get(key, "")) <= limit:
+            fail(f"plugins/logbrew/plugin.json: interface.{key} must have 1-{limit} characters")
+    for key in ("websiteURL", "supportURL", "privacyPolicyURL", "termsOfServiceURL"):
+        if not str(ui.get(key, "")).startswith("https://"):
+            fail(f"plugins/logbrew/plugin.json: interface.{key} must be an https URL")
+    for key in ("logo", "composerIcon"):
+        if not plugin_file(ui.get(key, "")):
+            fail(f"plugins/logbrew/plugin.json: interface.{key} must be a ./ path to a file in the plugin")
+    if len(ui.get("defaultPrompt", [])) > 3 or any(len(p) > 128 for p in ui.get("defaultPrompt", [])):
+        fail("plugins/logbrew/plugin.json: interface.defaultPrompt takes up to 3 prompts of 128 characters")
 
 
 def check_links(path: Path) -> None:

@@ -1,7 +1,7 @@
 # LogBrew Skills
 
-Agent skills that debug production errors, add error tracking to an app, and
-check a release after a deploy. They use the
+Agent skills that debug production errors, add error tracking to an app, read
+product analytics, and check a release after a deploy. They use the
 [Agent Skills](https://agentskills.io) format, so they work in Claude Code,
 Codex, Cursor, GitHub Copilot, Gemini CLI, and other agents that read skills.
 
@@ -37,6 +37,14 @@ On Claude Code versions before 2.1.275, add the marketplace first:
 /plugin install logbrew@logbrew
 ```
 
+Codex, with the skills and the LogBrew MCP server in 1 plugin:
+
+```bash
+codex plugin marketplace add LogBrewCo/skills
+```
+
+Then enter `/plugins` in Codex and install **LogBrew**.
+
 Gemini CLI, with the skills and the LogBrew MCP server in 1 extension:
 
 ```bash
@@ -69,7 +77,7 @@ Use 1 of these:
   `npm install -g logbrew-cli@latest`, then run `logbrew login`. See
   [Install and use the LogBrew CLI](https://docs.logbrew.co/guides/cli).
 
-Free plan: 50 GB of logs a month, no card.
+Free plan: 100k errors and 50 GB of logs a month, no card.
 [Create an account](https://logbrew.co).
 
 ## What is in each skill
