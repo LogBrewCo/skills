@@ -3,7 +3,8 @@
 Agent skills that debug production errors, add error tracking to an app, read
 product analytics, and check a release after a deploy. They use the
 [Agent Skills](https://agentskills.io) format, so they work in Claude Code,
-Codex, Cursor, GitHub Copilot, Gemini CLI, and other agents that read skills.
+Codex, Cursor, GitHub Copilot, Gemini CLI, Antigravity, and other agents that
+read skills.
 
 Each skill reads [LogBrew](https://logbrew.co) through the hosted MCP server
 or the `logbrew` CLI. With no tool connected, each skill follows the same
@@ -52,6 +53,15 @@ gemini extensions install https://github.com/LogBrewCo/skills
 ```
 
 Then run `/mcp auth logbrew` in Gemini CLI to sign in.
+
+Antigravity, with the skills and the LogBrew MCP server in 1 plugin:
+
+```bash
+agy plugin install https://github.com/LogBrewCo/skills/tree/main/plugins/logbrew
+```
+
+Then enter `/plugin` in Antigravity, expand **logbrew** under Installed, and
+choose **Sign in**.
 
 Cursor and Kiro read the plugin in [`plugins/logbrew/`](plugins/logbrew). It
 holds the skills and the LogBrew MCP server.
@@ -105,12 +115,12 @@ plugins/logbrew/skills/
 
 `python3 scripts/check.py` checks the skill format, the links, and the eval
 cases in [`tests/evals.json`](tests/evals.json). It checks that the Claude
-Code, Gemini CLI, Cursor, and Agent Plugins manifests agree on the name,
-version, and MCP server. It also checks that every `logbrew` command matches
-the help of the installed CLI, and that every MCP operation and input field is
-in the published operation catalog. It makes no model calls. CI runs it
+Code, Gemini CLI, Cursor, Antigravity, and Agent Plugins manifests agree on
+the name, version, and MCP server. It also checks that every `logbrew` command
+matches the help of the installed CLI, and that every MCP operation and input
+field is in the published operation catalog. It makes no model calls. CI runs it
 against the newest CLI release on every pull request, with the plugin
-validators of Claude Code, Cursor, and Gemini CLI.
+validators of Claude Code, Cursor, Gemini CLI, and Antigravity.
 
 Each eval case is a prompt with the steps, commands, and operations that the
 skill must give for it. To test a skill with a model, give the prompt to your

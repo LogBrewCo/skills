@@ -1,0 +1,32 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "logbrew",
+  "displayName": "LogBrew",
+  "version": "0.3.5",
+  "description": "Error tracking, logs, APM, and product analytics your AI agent can read. Generous free tier, no card needed. Connects the hosted LogBrew MCP server and adds 4 skills to debug a production error, add error tracking to an app, read product analytics, and check a release.",
+  "logo": "assets/icon.png",
+  "suggestedPrompts": [
+    "Why did checkout break after the last deploy?",
+    "Add error tracking to this app.",
+    "Is the latest release safe to keep?"
+  ],
+  "author": {
+    "name": "LogBrew",
+    "url": "https://logbrew.co"
+  },
+  "homepage": "https://logbrew.co",
+  "repository": "https://github.com/LogBrewCo/skills",
+  "license": "MIT",
+  "keywords": [
+    "debugging",
+    "error-tracking",
+    "logging",
+    "tracing",
+    "observability",
+    "releases",
+    "mcp",
+    "performance-monitoring",
+    "crash-reporting",
+    "product-analytics"
+  ]
+}
