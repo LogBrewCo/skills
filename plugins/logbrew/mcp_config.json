@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "logbrew": {
+      "serverUrl": "https://logbrew.co/mcp"
+    }
+  }
+}

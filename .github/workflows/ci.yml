@@ -66,6 +66,27 @@ jobs:
           curl -fsSL -o "$script" https://raw.githubusercontent.com/cursor/plugin-template/46216072ac5750f782f95bb325b4d12b7c3ae9c9/scripts/validate-template.mjs
           node "$script"
 
+      - name: Validate the Antigravity plugin
+        env:
+          AGY_URL: https://storage.googleapis.com/antigravity-public/antigravity-cli/1.5.17-4823843970351104/linux-x64/cli_linux_x64.tar.gz
+          AGY_SHA256: 6304b4f592ae97e59231cfb1b365ee29c155750c9a881f0cc8efe5f5281077cf
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/antigravity-cli"
+          mkdir -p "$dir"
+          curl -fsSL --retry 5 -o "$dir/cli.tar.gz" "$AGY_URL"
+          echo "$AGY_SHA256  $dir/cli.tar.gz" | sha256sum -c -
+          tar -xzf "$dir/cli.tar.gz" -C "$dir"
+          "$dir/antigravity" plugin validate --json plugins/logbrew > "$dir/report.json"
+          # The plugin folder also holds the Agent Plugins manifest and mcp.json
+          # for Kiro and Cursor. Antigravity reports those 2 files as ignored,
+          # and every other finding fails the step.
+          jq -e '
+            .manifest == ".antigravity-plugin/plugin.json"
+            and .components.skills == 4 and .components.mcpServers == 1
+            and ([.findings[] | select(.severity != "note") | .file] | sort) == ["mcp.json", "plugin.json"]
+          ' "$dir/report.json"
+
       - name: Build and validate the Gemini CLI extension archive
         env:
           HOME: ${{ runner.temp }}/gemini-home

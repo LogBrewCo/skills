@@ -5,8 +5,8 @@ The checks are deterministic and make no model calls:
 
 - Skill frontmatter follows the Agent Skills format.
 - Plugin and marketplace manifests parse and point at existing paths.
-- The Gemini CLI, Cursor, and Agent Plugins manifests match the Claude Code
-  plugin in name, version, description, and MCP server URL.
+- The Gemini CLI, Cursor, Antigravity, and Agent Plugins manifests match the
+  Claude Code plugin in name, version, description, and MCP server URL.
 - The Claude and OpenAI directory fields point at existing files and stay
   within the directory limits.
 - Every relative Markdown link resolves.
@@ -155,18 +155,21 @@ def load_json(path: Path) -> dict:
 
 
 def check_other_manifests(plugin: dict) -> None:
-    """Keep the Gemini CLI, Cursor, and Agent Plugins manifests in step with
-    the Claude Code plugin: same name, version, and MCP server URL."""
+    """Keep the Gemini CLI, Cursor, Antigravity, and Agent Plugins manifests in
+    step with the Claude Code plugin: same name, version, and MCP server URL."""
     url = plugin.get("mcpServers", {}).get("logbrew", {}).get("url")
     gemini = load_json(ROOT / "gemini-extension.json")
     cursor_market = load_json(ROOT / ".cursor-plugin" / "marketplace.json")
     cursor = load_json(PLUGIN / ".cursor-plugin" / "plugin.json")
     agent = load_json(PLUGIN / "plugin.json")
     agent_mcp = load_json(PLUGIN / "mcp.json")
+    antigravity = load_json(PLUGIN / ".antigravity-plugin" / "plugin.json")
+    antigravity_mcp = load_json(PLUGIN / "mcp_config.json")
     servers = {
         "gemini-extension.json": gemini.get("mcpServers", {}).get("logbrew", {}).get("httpUrl"),
         "plugins/logbrew/.cursor-plugin/plugin.json": cursor.get("mcpServers", {}).get("logbrew", {}).get("url"),
         "plugins/logbrew/mcp.json": agent_mcp.get("mcpServers", {}).get("logbrew", {}).get("url"),
+        "plugins/logbrew/mcp_config.json": antigravity_mcp.get("mcpServers", {}).get("logbrew", {}).get("serverUrl"),
     }
     for path, value in servers.items():
         if value != url:
@@ -175,6 +178,7 @@ def check_other_manifests(plugin: dict) -> None:
         "gemini-extension.json": gemini,
         "plugins/logbrew/.cursor-plugin/plugin.json": cursor,
         "plugins/logbrew/plugin.json": agent,
+        "plugins/logbrew/.antigravity-plugin/plugin.json": antigravity,
     }.items():
         for key in ("name", "version", "description"):
             if manifest.get(key) != plugin.get(key):
@@ -194,11 +198,30 @@ def check_other_manifests(plugin: dict) -> None:
     if not agent.get("keywords") or not agent.get("author", {}).get("name"):
         fail("plugins/logbrew/plugin.json: Kiro needs keywords and an author name")
     check_listing_assets(plugin, agent)
+    check_antigravity(antigravity)
     if agent_mcp.get("$schema") != AGENT_PLUGINS + "mcp.schema.json" or set(agent_mcp) != {"$schema", "mcpServers"}:
         fail(f"plugins/logbrew/mcp.json: needs only $schema {AGENT_PLUGINS}mcp.schema.json and mcpServers")
     for name, server in agent_mcp.get("mcpServers", {}).items():
         if server.get("type") != "streamable-http" or set(server) - {"type", "url", "headers"}:
             fail(f"plugins/logbrew/mcp.json: server {name!r} must be a streamable-http server")
+
+
+ANTIGRAVITY_SCHEMA = "https://antigravity.google/schemas/v1/plugin.json"
+
+
+def check_antigravity(manifest: dict) -> None:
+    """The Antigravity marketplace needs a display name, a logo, and an
+    author, and shows up to 3 suggested prompts."""
+    path = "plugins/logbrew/.antigravity-plugin/plugin.json"
+    if manifest.get("$schema") != ANTIGRAVITY_SCHEMA:
+        fail(f"{path}: $schema must be {ANTIGRAVITY_SCHEMA}")
+    if not manifest.get("displayName") or not manifest.get("author", {}).get("name"):
+        fail(f"{path}: the Antigravity marketplace needs displayName and an author name")
+    logo = manifest.get("logo", "")
+    if not logo or ".." in logo or not (PLUGIN / logo).is_file():
+        fail(f"{path}: logo must be a file in the plugin")
+    if not 1 <= len(manifest.get("suggestedPrompts", [])) <= 3:
+        fail(f"{path}: suggestedPrompts takes 1 to 3 prompts")
 
 
 # Links
