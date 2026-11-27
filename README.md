@@ -83,8 +83,9 @@ Use 1 of these:
   `https://logbrew.co/mcp` as a remote (HTTP) MCP server and sign in.
   The connection reads only the projects that you approve. See
   [Connect an AI agent with MCP](https://docs.logbrew.co/guides/mcp).
-- **CLI.** Install it with `brew install LogBrewCo/tap/logbrew` or
-  `npm install -g logbrew-cli@latest`, then run `logbrew login`. See
+- **CLI.** Install it with `npm install -g logbrew-cli@latest`, or with Homebrew
+  run `brew trust --formula LogBrewCo/tap/logbrew` and then
+  `brew install LogBrewCo/tap/logbrew`. Then run `logbrew login`. See
   [Install and use the LogBrew CLI](https://docs.logbrew.co/guides/cli).
 
 Free plan: 100k errors and 50 GB of logs a month, no card.
